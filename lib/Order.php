@@ -25,8 +25,8 @@ class Order extends AbstractOrder
         $this->name = $order['name'];
         $this->shopperEmailAddress = $order['shopperEmailAddress'];
         $this->authorizeOnly = isset($order['authorizeOnly']) && $order['authorizeOnly']
-                            || isset($order['authoriseOnly']) && $order['authoriseOnly']
-                            ? true : false;
+        || isset($order['authoriseOnly']) && $order['authoriseOnly']
+            ? true : false;
         $this->billingAddress = new BillingAddress($order['billingAddress']);
         $this->deliveryAddress = new DeliveryAddress($order['deliveryAddress']);
         $this->customerOrderCode = $order['customerOrderCode'];
@@ -43,7 +43,7 @@ class Order extends AbstractOrder
         }
 
         if ($this->is3DSOrder) {
-            $_SESSION['worldpay_sessionid'] = uniqid();
+            $_SESSION['worldpay_sessionid'] = $order['shopperSessionId'];
             $threeDSShopper = Utils::getThreeDSShopperObject();
             $this->shopperIpAddress = $threeDSShopper['shopperIpAddress'];
             $this->shopperSessionId = $threeDSShopper['shopperSessionId'];
@@ -89,12 +89,12 @@ class Order extends AbstractOrder
             $_cvc = isset($_orderPM['cvc']) ? $_orderPM['cvc'] : "";
 
             $paymentMethod = array(
-                  "type" => "Card",
-                  "name" => $_name,
-                  "expiryMonth" => $_expiryMonth,
-                  "expiryYear" => $_expiryYear,
-                  "cardNumber"=> $_cardNumber,
-                  "cvc"=> $_cvc,
+                "type" => "Card",
+                "name" => $_name,
+                "expiryMonth" => $_expiryMonth,
+                "expiryYear" => $_expiryYear,
+                "cardNumber"=> $_cardNumber,
+                "cvc"=> $_cvc,
             );
         }
         return $paymentMethod;
